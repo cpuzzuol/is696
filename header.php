@@ -1,13 +1,41 @@
 <?php
+//initialize the session
+if (!isset($_SESSION)) {
+  session_start();
+}
+// ** Logout the current user. **
+$logoutAction = $_SERVER['PHP_SELF']."?doLogout=true";
+if ((isset($_SERVER['QUERY_STRING'])) && ($_SERVER['QUERY_STRING'] != "")){
+  $logoutAction .="&". htmlentities($_SERVER['QUERY_STRING']);
+}
+if ((isset($_GET['doLogout'])) &&($_GET['doLogout']=="true")){
+  //to fully log out a visitor we need to clear the session varialbles
+  $_SESSION['MM_Username'] = NULL;
+  $_SESSION['MM_UserGroup'] = NULL;
+  $_SESSION['PrevUrl'] = NULL;
+  unset($_SESSION['MM_Username']);
+  unset($_SESSION['MM_UserGroup']);
+  unset($_SESSION['PrevUrl']);
+  $logoutGoTo = "index.php";
+  if ($logoutGoTo) {
+    header("Location: $logoutGoTo");
+    exit;
+  }
+}
+?>
+<?php
 if (!isset($_SESSION)) {
   session_start();
 } 
-if(isset($_SESSION['MM_Username'])){
+if(isset($_SESSION['MM_Username']) && !isset($_SESSION['MM_UserGroup'])){
 	$linkage = "myaccount.php";
-	$loggedin = "<strong><span style=\"color:red\">".$_SESSION['MM_Username']."</span></strong>";
+	$loggedin = "<strong><span style=\"color:yellow\">".$_SESSION['MM_Username']."</span></strong>";
+} elseif(isset($_SESSION['MM_Username']) && isset($_SESSION['MM_UserGroup'])) {
+	$linkage = "employeeaccount.php";
+	$loggedin = "<strong><span style=\"color:yellow\">".$_SESSION['MM_Username']."</span></strong>";
 } else {
 	$linkage = "customerLogin.php";
-	$loggedin = "<strong><span style=\"color:red\">login</span></strong>";
+	$loggedin = "<strong><span style=\"color:yellow\">login</span></strong>";
 }
 ?>
 <!doctype html>
@@ -34,8 +62,25 @@ if(isset($_SESSION['MM_Username'])){
         <script src="SpryAssets/SpryValidationTextarea.js" type="text/javascript"></script>
 		<script src="SpryAssets/SpryValidationPassword.js" type="text/javascript"></script>
 		<script src="SpryAssets/SpryValidationConfirm.js" type="text/javascript"></script>
-        <script src="SpryAssets/SpryValidationTextField.js" type="text/javascript"></script>
-
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>
+		/*This script highlights the currently selected pages on the nav and sidebar menus*/
+			$(document).ready(function () {        
+				var url = window.location;
+				// Will only work if string in href matches with location
+				$('ul.nav a[href="'+ url +'"]').parent().addClass('active');
+				
+				// Will also work for relative and absolute hrefs
+				$('ul.nav a').filter(function() {
+					return this.href == url;
+				}).parent().addClass('active');
+				// Prevents "print invoice" buttom from submitting on servicedetail.php
+				/*$('#toInvoice').click(function(e){
+					// custom handling here
+					e.preventDefault();
+				});*/
+			}); 
+  		</script>
 </head>
 <body>
 <div id="site-wrapper">
@@ -51,7 +96,7 @@ if(isset($_SESSION['MM_Username'])){
                         </p>
                      
                          <ul class="nav">
-                            <li class="active">
+                            <li>
                                 <a href="index.php">Home</a>
                             </li>
                             <li>
@@ -60,21 +105,25 @@ if(isset($_SESSION['MM_Username'])){
                             <li>
                                 <a href="contact.php">Contact</a>
                             </li>
+                            <?php if(!isset($_SESSION['MM_UserGroup'])): ?>
                             <li>
-                              <a href="createreservation.php">Make a Service Appointment</a>
+                              <a href="createreservation.php">Create a Service Request</a>
                             </li>
+                            <?php else: ?>
                             <li>
-                              <a href="employeelogin.php">Employees</a>
+                              <a href="employeestart.php">Employee Options</a>
                             </li>
-                            <li>
-                              <a href="myaccount.php">My Account</a>
-                            </li>
+                            <?php endif; ?>
                             <li>
                               <a href="<?php echo $linkage;?>"><?php echo $loggedin; ?></a>
                             </li>
+                            <?php if(isset($_SESSION['MM_Username'])): ?>
+                            <li>
+                            <a href="<?php echo $logoutAction ?>">Log out</a>
+                            </li>
+                            <?php endif; ?>
                            </ul>
-                  </div>
-                   
+                  </div> 
                 </div>
             </div>
         </div>

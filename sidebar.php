@@ -4,7 +4,7 @@
                     <div class="well sidebar-nav">
                         <ul class="nav nav-list">
                             <li class="nav-header">Quick Links</li>
-                            <li class="active">
+                            <li>
                                 <a href="index.php">Home</a>
                             </li>
                             <li>
@@ -13,21 +13,27 @@
                             <li>
                                 <a href="contact.php">Contact</a>
                             </li>
+                            <?php if(!isset($_SESSION['MM_UserGroup'])): ?>
                             <li>
-                                <a href="createreservation.php">Appointments</a>
+                              <a href="createreservation.php">Service Requests</a>
                             </li>
+                            <?php else: ?>
+                            <li>
+                              <a href="employeestart.php">Employee Options</a>
+                            </li>
+                            <?php endif; ?>
                             <li class="nav-header">Services</li>
                             <li>
-                                <a href="#">Oil Changes</a>
+                                <a href="oilchange.php">Oil Changes</a>
                             </li>
                             <li>
-                                <a href="#">Brakes</a>
+                                <a href="brakes.php">Brakes</a>
                             </li>
                             <li>
-                                <a href="#">Alignments</a>
+                                <a href="alignments.php">Alignments</a>
                             </li>
                             <li>
-                                <a href="#">Tune Ups</a>
+                                <a href="tuneups.php">Tune Ups</a>
                             </li>
                         </ul>
                     </div>

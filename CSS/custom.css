@@ -47,22 +47,49 @@ p.user-display{
 .navbar .nav>li>a:focus,.navbar .nav>li>a:hover{background-color:transparent;color:#FF0;text-decoration:none;}
 
 /*Table on "Make a Service Appointment*/
-form table tbody{	
+form table tbody, table tbody{	
   -webkit-box-shadow: 0px 0px 4px 0px #FF0;
           box-shadow: 0px 0px 4px 0px #FF0;
 }
-form table{
+form table, table{
 	border-collapse:separate;
 	border-spacing:2px;
 }
 
-form table tr:nth-child(odd){	
+form table tr:nth-child(odd), table tr:nth-child(odd){	
 	background-color:#CCC;
 }
-form table tr:first-child{	
+form table thead, table thead{	
 	font-weight:bold;
 }
-form table tr:hover{	
+form table tr a, table tr a{	
+	color:#000;
+	text-decoration:underline
+}
+/*form table tr:hover, table tr:hover, form table tr a:hover, table tr a:hover{	
 	background-color:#0088CC;
 	color:#FFF;
-}	
+}*/	
+
+#servicenotes-main tr:hover{background-color:none}
+
+
+.detail {
+	font-weight: bold;
+}
+
+.red-button{
+	background-color:#900;	
+	color:#CCC;
+}
+.green-button{
+	background-color:#0088CC;	
+	color:#CCC;
+}
+
+.no-border-cell{
+	border-collapse:collapse;	
+	border:none;
+}.fsdfd {
+	font-weight: bold;
+}

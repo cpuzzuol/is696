@@ -1,0 +1,1 @@
+﻿<?xml version="1.0" encoding="utf-8" ?><info>	<infoitem key="UD_rs_service" value="name:SerivceID;datatype:int,name:DateOut;datatype:date,name:ServiceReq;datatype:string,name:DateRequest;datatype:date,name:Customer_CustomerID;datatype:int,name:vehicleYear;datatype:int,name:vehicleMake;datatype:string,name:vehicleModel;datatype:string" /></info>

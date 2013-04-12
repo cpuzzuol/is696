@@ -46,7 +46,7 @@ if (isset($_POST['username'])) {
   $loginUsername=$_POST['username'];
   $password=$_POST['password'];
   $MM_fldUserAuthorization = "";
-  $MM_redirectLoginSuccess = "reservationsList.php";
+  $MM_redirectLoginSuccess = "employeestart.php";
   $MM_redirectLoginFailed = "employeelogin.php";
   $MM_redirecttoReferrer = false;
   mysql_select_db($database_godaddy, $godaddy);
@@ -57,12 +57,15 @@ if (isset($_POST['username'])) {
   $LoginRS = mysql_query($LoginRS__query, $godaddy) or die(mysql_error());
   $loginFoundUser = mysql_num_rows($LoginRS);
   if ($loginFoundUser) {
-     $loginStrGroup = "";
-    
+     /*THIS VARIABLE SHOULD ONLY BE SET FOR EMPLOYEES!!*/
+	 $loginStrGroup = "employee";
+     $rightCredentials = true;
 	if (PHP_VERSION >= 5.1) {session_regenerate_id(true);} else {session_regenerate_id();}
     //declare two session variables and assign them
     $_SESSION['MM_Username'] = $loginUsername;
-    $_SESSION['MM_UserGroup'] = $loginStrGroup;	      
+    
+	/*THIS VARIABLE SHOULD ONLY BE SET FOR EMPLOYEES!!*/
+	$_SESSION['MM_UserGroup'] = $loginStrGroup;	      
 
     if (isset($_SESSION['PrevUrl']) && false) {
       $MM_redirectLoginSuccess = $_SESSION['PrevUrl'];	
@@ -70,35 +73,28 @@ if (isset($_POST['username'])) {
     header("Location: " . $MM_redirectLoginSuccess );
   }
   else {
-    
-	echo "<span class=required><em>incorrect username or password</em></span>";
- 
+	$rightCredentials = false;
+	$wrongcreds = "<font color=#FF0000 ><em>incorrect username or password</em></font>";
   }
   
 }
 ?>
-
 <?php include 'header.php' ?>
 <?php include 'sidebar.php' ?>
-
-<p>Reservation Management System </p>
+<p><h4><font color="#FF0000">Service Request Management</font></h4> </p>
+<?php if(!$rightCredentials){echo $wrongcreds;}?>
 <form action="<?php echo $loginFormAction; ?>" method="POST">
   <span id="sprytextfield1">
-  <input type="text" name="username" id="username">
-  <span class="textfieldRequiredMsg">enter your Mr. Muffler employe username</span></span>
-
-
-
-
+  <input type="text" name="username" id="username" placeholder="employee username">
+  <span class="textfieldRequiredMsg">enter your username</span></span>
   <p><span id="sprytextfield2">
-    <input type="password" name="password" id="password">
+    <input type="password" name="password" id="password" placeholder="password">
     <span class="textfieldRequiredMsg">enter your password</span></span>
     </p>
   <p>
     <input type="submit" name="Login" id="Login" value="Submit">
   </p>
 </form>
-
 <?php include 'footer.php' ?>
 <script type="text/javascript">
 var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1");

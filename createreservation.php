@@ -2,13 +2,12 @@
 <?php
 if (!isset($_SESSION)) {
   session_start();
-} 
-if(isset($_SESSION['MM_Username'])){
+}
 $MM_authorizedUsers = "";
 $MM_donotCheckaccess = "true";
 
 // *** Restrict Access To Page: Grant or deny access to this page
-/*function isAuthorized($strUsers, $strGroups, $UserName, $UserGroup) { 
+function isAuthorized($strUsers, $strGroups, $UserName, $UserGroup) { 
   // For security, start by assuming the visitor is NOT authorized. 
   $isValid = False; 
 
@@ -44,7 +43,8 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("",$MM_authorizedUsers,
   header("Location: ". $MM_restrictGoTo); 
   exit;
 }
-?>*/
+?>
+<?php
 if (!function_exists("GetSQLValueString")) {
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
 {
@@ -82,7 +82,8 @@ if (isset($_SERVER['QUERY_STRING'])) {
 }
 
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
-  $insertSQL = sprintf("INSERT INTO Service (ServiceReq, DateRequest, vehicleYear, vehicleMake, vehicleModel) VALUES (%s, %s, %s, %s, %s)",
+  $insertSQL = sprintf("INSERT INTO Service (username, ServiceReq, DateRequest, vehicleYear, vehicleMake, vehicleModel) VALUES (%s, %s, %s, %s, %s, %s)",
+                       GetSQLValueString($_POST['hiddenusername'], "text"),
                        GetSQLValueString($_POST['issue'], "text"),
                        GetSQLValueString($_POST['dateRequest'], "date"),
                        GetSQLValueString($_POST['year'], "int"),
@@ -113,17 +114,22 @@ $row_rs_model = mysql_fetch_assoc($rs_model);
 $totalRows_rs_model = mysql_num_rows($rs_model);
 
 mysql_select_db($database_godaddy, $godaddy);
-$query_rs_year = "SELECT DISTINCT `year` FROM VehicleModelYear ORDER BY `year` ASC";
+$query_rs_year = "SELECT DISTINCT `year` FROM VehicleModelYear ORDER BY `year` DESC";
 $rs_year = mysql_query($query_rs_year, $godaddy) or die(mysql_error());
 $row_rs_year = mysql_fetch_assoc($rs_year);
 $totalRows_rs_year = mysql_num_rows($rs_year);
 ?>
-
+<?php
+$editFormAction = $_SERVER['PHP_SELF'];
+if (isset($_SERVER['QUERY_STRING'])) {
+  $editFormAction .= "?" . htmlentities($_SERVER['QUERY_STRING']);
+}
+?>
 <?php include 'header.php' ?>
 <?php include 'sidebar.php'?>
-<h4>
-          <p>Creating a new auto service reservation is easy.</p>
-Hi, <?php echo $_SESSION['MM_Username']; ?>. </h4>
+<p>Creating a new auto service reservation is easy.</p>
+<h4>Hi, <font color="blue"><?php echo $_SESSION['MM_Username']; ?>.</font> </h4>
+<p style="font-style:italic"><a href="myaccount.php">Click here</a> to edit your account details.</p>
         <p><font size="+1">Step 1.</font> Choose a date.</p>
         <p><font size="+1">Step 2.</font> Describe the issue you're having and the service you'd like us to work on. Feel free to be as detailed as possible.</p>
         <p>After we receive your request one of our technicians will review the request and contact you to confirm your reservation</p>
@@ -138,9 +144,9 @@ Hi, <?php echo $_SESSION['MM_Username']; ?>. </h4>
   });
   </script>
 <form action="<?php echo $editFormAction; ?>" name="form1" method="POST">
-<p>Date: <span id="sprytextfield1">
-  <input id="datepicker" type="text">
-  <span class="textfieldRequiredMsg">A value is required.</span></span></p>
+<p><span id="sprytextfield1"><span id="sprytextfield2"><span id="sprytextfield3">
+<input id="datepicker" type="text" placeholder="Choose a Date">
+<span class="textfieldRequiredMsg">Select a date</span></span></p>
 <input name="dateRequest" type="hidden" id="alt-datepicker">
 
 <script type="text/javascript">
@@ -150,19 +156,19 @@ Hi, <?php echo $_SESSION['MM_Username']; ?>. </h4>
     altFormat : 'yy-mm-dd',
     format    : 'mm-dd-yy'
 });
-</script>
-<p>What kind of work would you like done?</p>
-<p><span id="sprytextarea1"><span id="sprytextarea2">
-<textarea name="issue" id="issue" cols="45" rows="5"></textarea>
-<span id="countsprytextarea2">&nbsp;</span><span class="textareaRequiredMsg">required</span><span class="textareaMaxCharsMsg">.</span></span><span id="countsprytextarea1">&nbsp;</span></span>
-<p><span><span class="textareaMaxCharsMsg">1000 characters max.</span></span> 
+</script><span id="sprytextarea1">
+<textarea name="issue" id="issue" cols="45" rows="5" placeholder="Describe the work you'd like to have done"></textarea>
+<span id="countsprytextarea1">&nbsp;</span>&nbsp;<span class="textareaRequiredMsg">required.</span><span class="textareaMaxCharsMsg">Exceeded maximum number of characters.</span></span>
 <p>
-  <select name="year" id="year">
-    <?php
+<table name="reso" id="reso" width="200" border="1">
+  <tr>
+    <th scope="col">Vehicle Year: </th>
+    <th scope="col"><select name="year" id="year">
+      <?php
 do {  
 ?>
-    <option value="<?php echo $row_rs_year['year']?>"><?php echo $row_rs_year['year']?></option>
-    <?php
+      <option value="<?php echo $row_rs_year['year']?>"><?php echo $row_rs_year['year']?></option>
+      <?php
 } while ($row_rs_year = mysql_fetch_assoc($rs_year));
   $rows = mysql_num_rows($rs_year);
   if($rows > 0) {
@@ -170,14 +176,16 @@ do {
 	  $row_rs_year = mysql_fetch_assoc($rs_year);
   }
 ?>
-  </select>
-<p>
-  <select name="make" id="make">
-    <?php
+    </select></th>
+  </tr>
+  <tr>
+    <th scope="row">Vehicle Make: </th>
+    <td><select name="make" id="make">
+      <?php
 do {  
 ?>
-    <option value="<?php echo $row_rs_make['make']?>"><?php echo $row_rs_make['make']?></option>
-    <?php
+      <option value="<?php echo $row_rs_make['make']?>"><?php echo $row_rs_make['make']?></option>
+      <?php
 } while ($row_rs_make = mysql_fetch_assoc($rs_make));
   $rows = mysql_num_rows($rs_make);
   if($rows > 0) {
@@ -185,14 +193,16 @@ do {
 	  $row_rs_make = mysql_fetch_assoc($rs_make);
   }
 ?>
-  </select>
-<p>
-  <select name="model" id="model">
-    <?php
+    </select></td>
+  </tr>
+  <tr>
+    <th scope="row">Vehicle Model: </th>
+    <td><select name="model" id="model">
+      <?php
 do {  
 ?>
-    <option value="<?php echo $row_rs_model['model']?>"><?php echo $row_rs_model['model']?></option>
-    <?php
+      <option value="<?php echo $row_rs_model['model']?>"><?php echo $row_rs_model['model']?></option>
+      <?php
 } while ($row_rs_model = mysql_fetch_assoc($rs_model));
   $rows = mysql_num_rows($rs_model);
   if($rows > 0) {
@@ -200,29 +210,30 @@ do {
 	  $row_rs_model = mysql_fetch_assoc($rs_model);
   }
 ?>
-  </select>
+    </select></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
 <p>
   <input type="submit" name="submit" id="submit" value="Submit">
   <input type="reset" name="reset" id="reset" value="Reset">
 <p>
+<p>
+  <input name="hiddenusername" type="hidden" value="<?php echo $_SESSION['MM_Username']; ?>">
   <input type="hidden" name="MM_insert" value="form1">
+ 
 </form>
-<h3>&nbsp;</h3>
-<?php include 'footer.php' ?>
+<script type="text/javascript">
+var sprytextarea1 = new Spry.Widget.ValidationTextarea("sprytextarea1", {maxChars:1000, counterId:"countsprytextarea1", counterType:"chars_remaining"});
+var sprytextfield3 = new Spry.Widget.ValidationTextField("sprytextfield3", "none");
+</script>
+</body>
+<?php include 'footer.php'?>
 <?php
+mysql_free_result($rs_year);
+
 mysql_free_result($rs_make);
 
 mysql_free_result($rs_model);
-
-mysql_free_result($rs_year);
-} else {
-	include 'header.php';
-    include 'sidebar.php';
-	session_start();?>
-	<p>You must be <a href="customerLogin.php">logged in</a> to make a reservation.</p>
-	
-<?php include 'footer.php';}/*END THE ELSE STATEMENT FROM WAY UP TOP!*/?>
-<script type="text/javascript">
-var sprytextarea2 = new Spry.Widget.ValidationTextarea("sprytextarea2", {maxChars:1000, counterId:"countsprytextarea2", counterType:"chars_remaining"});
-var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1");
-</script>
+?>
+</html>

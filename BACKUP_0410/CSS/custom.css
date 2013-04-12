@@ -1,0 +1,94 @@
+/* CSS Document */
+@import url("bootstrap.min.css");
+
+body{
+	background-color:#CCC;
+}
+#site-wrapper{
+	margin:0 auto;
+	width:960px;
+	background-color:#FFF;	
+}
+.sidebar-nav{
+	background-color:#333;
+	border:2px solid gray;
+}
+
+p.user-display{
+	margin-left:20px;	
+}
+
+.sidebar-nav a{
+	color:#FF0;
+}
+#wowslider-container1 {
+    border: 9px solid #FFFFFF;
+    height: 240px;
+    margin: 9px auto;
+    max-width: 960px;
+    position: relative;
+    text-align: left;
+    z-index: 90;
+}
+.container-fluid {width:960px;margin:0 auto}
+
+.nav-list > .active > a, .nav-list > .active > a:hover, .nav-list > .active > a:focus {
+    background-color: #0088CC;
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+.nav>li>a:hover,.nav>li>a:focus{text-decoration:none;color:#FFFFFF;background-color:#0088CC;}
+.nav-header{display:block;padding:3px 15px;font-size:14px;font-weight:bold;line-height:20px;color:#FFFFFF;text-shadow:0 1px 0 rgba(255, 255, 255, 0.5);text-transform:uppercase;}
+.navbar{overflow:visible;margin-bottom:20px;*position:relative;*z-index:2;}
+.navbar-inner{min-height:40px;padding-left:20px;padding-right:20px;background-color:#fafafa;background-image:-moz-linear-gradient(top, #36C, #9F3);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#0088CC), to(#003));background-image:-webkit-linear-gradient(top, #0088CC, #003);background-image:-o-linear-gradient(top, #0088CC, #003);background-image:linear-gradient(to bottom, #0088CC, #003);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088CC', endColorstr='#003', GradientType=0);border:1px solid #d4d4d4;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.065);-moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.065);box-shadow:0 1px 4px rgba(0, 0, 0, 0.065);*zoom:1;}.navbar-inner:before,.navbar-inner:after{display:table;content:"";line-height:0;}
+.navbar .brand{float:left;display:block;padding:10px 20px 10px;margin-left:-20px;font-size:20px;font-weight:200;color:#FF0;text-shadow:none;}
+.navbar .brand:hover,.navbar .brand:focus{text-decoration:none;}
+.navbar .nav>li>a{float:none;padding:10px 15px 10px;color:#FFFFFF;text-decoration:none;text-shadow:none;}
+.navbar .nav>li>a:focus,.navbar .nav>li>a:hover{background-color:transparent;color:#FF0;text-decoration:none;}
+
+/*Table on "Make a Service Appointment*/
+form table tbody, table tbody{	
+  -webkit-box-shadow: 0px 0px 4px 0px #FF0;
+          box-shadow: 0px 0px 4px 0px #FF0;
+}
+form table, table{
+	border-collapse:separate;
+	border-spacing:2px;
+}
+
+form table tr:nth-child(odd), table tr:nth-child(odd){	
+	background-color:#CCC;
+}
+form table thead, table thead{	
+	font-weight:bold;
+}
+form table tr a, table tr a{	
+	color:#000;
+	text-decoration:underline
+}
+/*form table tr:hover, table tr:hover, form table tr a:hover, table tr a:hover{	
+	background-color:#0088CC;
+	color:#FFF;
+}*/	
+
+#servicenotes-main tr:hover{background-color:none}
+
+.detail {
+	font-weight: bold;
+}
+
+.red-button{
+	background-color:#900;	
+	color:#CCC;
+}
+.green-button{
+	background-color:#0088CC;	
+	color:#CCC;
+}
+
+.no-border-cell{
+	border-collapse:collapse;	
+	border:none;
+}.fsdfd {
+	font-weight: bold;
+}
